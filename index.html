@@ -16,26 +16,26 @@ $(window).on("load", function() {
         type: "text",
         placeholder: "Title of the movie",
         value: "Movie of My Life"
-    }).appendTo(form).on("change", function(e){
+    }).appendTo(form).on("keyup keypress blur change", function(e){
         if(e.target.value.length < 2)
-            titleText.css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
+            $(titleText).css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
         else
-            titleText.css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
+            $(titleText).css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
     });
     const ratingText = $("<input>").attr({
         type: "text",
         placeholder: "Rating (0.0-10.0)",
         value : "2.2"
-    }).appendTo(form).on("change", function(e){
+    }).appendTo(form).on("keyup keypress blur change", function(e){
         let rating = parseFloat(e.target.value);
         rating = +rating.toFixed(1);
         if(typeof rating !== 'number' ||
             isNaN(rating) || 
             rating < 0 || 
             rating > 10)
-            ratingText.css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
+            $(ratingText).css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
         else
-            ratingText.css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
+            $(ratingText).css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
     });
     const movieRatings = new MovieRatingsList();
     $("<input>").attr({
@@ -46,8 +46,8 @@ $(window).on("load", function() {
         if(movieRatings.addMovie(new MovieRating($(titleText).val(), $(ratingText).val()))){
             $(ratingText).val("");
             $(titleText).val("");            
-            titleText.css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
-            ratingText.css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
+            $(titleText).css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
+            $(ratingText).css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
             movieRatings.updateDOM();
         }
     });
