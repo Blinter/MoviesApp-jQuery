@@ -245,7 +245,7 @@ class MovieRatingsList {
             movie.rating === undefined || 
             this.movieRatings.some(v=>v.title==movie.title))
             return false;
-        this.movieRatings.push(movie);
+        this.movieRatings.unshift(movie);
         return true;
     }
     /**
