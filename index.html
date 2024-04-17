@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies App</title>
+  <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(window).on("load", function() {
+    const form = $("<form>").appendTo($(".form-control"));
+    const titleText = $("<input>").attr({
+        type: "text",
+        placeholder: "Title of the movie",
+        value: "Movie of My Life"
+    }).appendTo(form).on("change", function(e){
+        if(e.target.value.length < 2)
+            titleText.css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
+        else
+            titleText.css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
+    });
+    const ratingText = $("<input>").attr({
+        type: "text",
+        placeholder: "Rating (0.0-10.0)",
+        value : "2.2"
+    }).appendTo(form).on("change", function(e){
+        let rating = parseFloat(e.target.value);
+        rating = +rating.toFixed(1);
+        if(typeof rating !== 'number' ||
+            isNaN(rating) || 
+            rating < 0 || 
+            rating > 10)
+            ratingText.css({"background-color":"yellow","color": "red", "font-style": "bold", "border-bottom": "2px dotted red", "display" : "inline-block", "position": "relative"});
+        else
+            ratingText.css({"background-color":"lightgreen","color": "black", "font-style": "normal", "border-bottom": "none"});
+    });
+    const movieRatings = new MovieRatingsList();
+    $("<input>").attr({
+        type: "button",
+        value: "Rate Movie"
+    }).appendTo(form).on("click", function(e) {
+        e.preventDefault();
+        if(movieRatings.addMovie(new MovieRating($(titleText).val(), $(ratingText).val()))){
+            $(ratingText).val("");
+            $(titleText).val("");
+            movieRatings.updateDOM();
+        }
+    });
+    $("<hr>").appendTo(form);
+    $("<h3>").css({"font-size":"14px", "font-style": "oblique"}).text("ACTIONS LIST").appendTo(form);
+    $("<input>").attr({
+        type: "button",
+        value: "Add IMDB Top 50"
+    }).appendTo(form).on("click", function(e) {
+        e.preventDefault();
+        //#region IMDB 250 list from 4/17/2024 imdb.com/chart/top/
+        movieRatings.addMovie(new MovieRating("The Shawshank Redemption", 9.3));
+        movieRatings.addMovie(new MovieRating("The Godfather", 9.2));
+        movieRatings.addMovie(new MovieRating("The Dark Knight", 9.0));
+        movieRatings.addMovie(new MovieRating("The Godfather Part II", 9.0));
+        movieRatings.addMovie(new MovieRating("12 Angry Men", 9.0));
+        movieRatings.addMovie(new MovieRating("Schindler's List", 9.0));
+        movieRatings.addMovie(new MovieRating("The Lord of the Rings: The Return of the King", 9.0));
+        movieRatings.addMovie(new MovieRating("Pulp Fiction", 8.9));
+        movieRatings.addMovie(new MovieRating("The Lord of the Rings: The Fellowship of the Ring", 8.9));
+        movieRatings.addMovie(new MovieRating("The Good, the Bad and the Ugly", 8.8));
+        movieRatings.addMovie(new MovieRating("Forrest Gump", 8.8));
+        movieRatings.addMovie(new MovieRating("The Lord of the Rings: The Two Towers", 8.8));
+        movieRatings.addMovie(new MovieRating("Fight Club", 8.8));
+        movieRatings.addMovie(new MovieRating("Inception", 8.8));
+        movieRatings.addMovie(new MovieRating("Star Wars: Episode V - The Empire Strikes Back", 8.7));
+        movieRatings.addMovie(new MovieRating("The Matrix", 8.7));
+        movieRatings.addMovie(new MovieRating("Goodfellas", 8.7));
+        movieRatings.addMovie(new MovieRating("Dune: Part Two", 8.7));
+        movieRatings.addMovie(new MovieRating("One Flew Over the Cuckoo's Nest", 8.7));
+        movieRatings.addMovie(new MovieRating("Se7en", 8.6));
+        movieRatings.addMovie(new MovieRating("Interstellar", 8.7));
+        movieRatings.addMovie(new MovieRating("It's a Wonderful Life", 8.6));
+        movieRatings.addMovie(new MovieRating("Seven Samurai", 8.6));
+        movieRatings.addMovie(new MovieRating("The Silence of the Lambs", 8.6));
+        movieRatings.addMovie(new MovieRating("Saving Private Ryan", 8.6));
+        movieRatings.addMovie(new MovieRating("City of God", 8.6));
+        movieRatings.addMovie(new MovieRating("Life Is Beautiful", 8.6));
+        movieRatings.addMovie(new MovieRating("The Green Mile", 8.6));
+        movieRatings.addMovie(new MovieRating("Terminator 2: Judgment Day", 8.6));
+        movieRatings.addMovie(new MovieRating("Star Wars: Episode IV - A New Hope", 8.6));
+        movieRatings.addMovie(new MovieRating("Back to the Future", 8.5));
+        movieRatings.addMovie(new MovieRating("Spirited Away", 8.6));
+        movieRatings.addMovie(new MovieRating("The Pianist", 8.5));
+        movieRatings.addMovie(new MovieRating("Parasite", 8.5));
+        movieRatings.addMovie(new MovieRating("Psycho", 8.5));
+        movieRatings.addMovie(new MovieRating("Spider-Man: Across the Spider-Verse", 8.6));
+        movieRatings.addMovie(new MovieRating("Gladiator", 8.5));
+        movieRatings.addMovie(new MovieRating("The Lion King", 8.5));
+        movieRatings.addMovie(new MovieRating("Léon: The Professional", 8.5));
+        movieRatings.addMovie(new MovieRating("The Departed", 8.5));
+        movieRatings.addMovie(new MovieRating("American History X", 8.5));
+        movieRatings.addMovie(new MovieRating("Whiplash", 8.5));
+        movieRatings.addMovie(new MovieRating("The Prestige", 8.5));
+        movieRatings.addMovie(new MovieRating("Grave of the Fireflies", 8.5));
+        movieRatings.addMovie(new MovieRating("Harakiri", 8.6));
+        movieRatings.addMovie(new MovieRating("The Usual Suspects", 8.5));
+        movieRatings.addMovie(new MovieRating("Casablanca", 8.5));
+        movieRatings.addMovie(new MovieRating("The Intouchables", 8.5));
+        movieRatings.addMovie(new MovieRating("Cinema Paradiso", 8.5));
+        movieRatings.addMovie(new MovieRating("Modern Times", 8.5));
+        //#endregion
+        movieRatings.updateDOM();
+    });
+    
+    $("<input>").attr({
+        type: "button",
+        value: "Pseudo-Values"
+    }).appendTo(form).on("click", function(e) {
+        e.preventDefault();
+        //#region Generated by prompts [ChatGPT-3.5 on 4/17/2024]
+        movieRatings.addMovie(new MovieRating("The Shadow's End", 6.8));
+        movieRatings.addMovie(new MovieRating("Whispers in the Mist", 7.2));
+        movieRatings.addMovie(new MovieRating("Echoes of Eternity", 8.1));
+        movieRatings.addMovie(new MovieRating("Sands of Serenity", 6.5));
+        movieRatings.addMovie(new MovieRating("Lost in Luminescence", 7.9));
+        movieRatings.addMovie(new MovieRating("Inferno's Embrace", 8.3));
+        movieRatings.addMovie(new MovieRating("Shadows of Solitude", 6.7));
+        movieRatings.addMovie(new MovieRating("Whispers in the Dark", 7.6));
+        movieRatings.addMovie(new MovieRating("Beyond the Horizon", 8.0));
+        movieRatings.addMovie(new MovieRating("Ghosts of the Past", 7.3));
+        movieRatings.addMovie(new MovieRating("Twilight's Embrace", 7.8));
+        movieRatings.addMovie(new MovieRating("Silent Echoes", 6.9));
+        movieRatings.addMovie(new MovieRating("Echoes of Destiny", 7.4));
+        movieRatings.addMovie(new MovieRating("Forgotten Realms", 6.6));
+        movieRatings.addMovie(new MovieRating("Whispers in the Wind", 7.5));
+        movieRatings.addMovie(new MovieRating("Mystic River", 8.2));
+        movieRatings.addMovie(new MovieRating("Eternal Shadows", 6.4));
+        movieRatings.addMovie(new MovieRating("Realm of Reflections", 7.1));
+        movieRatings.addMovie(new MovieRating("Whispers of Wisdom", 7.7));
+        movieRatings.addMovie(new MovieRating("Beyond the Veil", 8.4));
+        movieRatings.addMovie(new MovieRating("Whispers in Time", 6.3));
+        movieRatings.addMovie(new MovieRating("Echoes of Illusion", 7.0));
+        movieRatings.addMovie(new MovieRating("Shadows of Destiny", 7.6));
+        movieRatings.addMovie(new MovieRating("Whispers of Hope", 6.8));
+        movieRatings.addMovie(new MovieRating("Lost in Limbo", 7.2));
+        movieRatings.addMovie(new MovieRating("Realm of Shadows", 8.1));
+        movieRatings.addMovie(new MovieRating("Echoes of Oblivion", 6.5));
+        movieRatings.addMovie(new MovieRating("Whispers of Despair", 7.9));
+        movieRatings.addMovie(new MovieRating("Echoes of Revelation", 8.3));
+        movieRatings.addMovie(new MovieRating("Shadows of Obscurity", 6.7));
+        movieRatings.addMovie(new MovieRating("Whispers in Disguise", 7.4));
+        movieRatings.addMovie(new MovieRating("Beyond the Abyss", 8.0));
+        movieRatings.addMovie(new MovieRating("Whispers in the Shadows", 7.3));
+        movieRatings.addMovie(new MovieRating("Echoes of Enigma", 7.8));
+        movieRatings.addMovie(new MovieRating("Shadows of Serenity", 6.9));
+        movieRatings.addMovie(new MovieRating("Whispers in the Night", 7.4));
+        movieRatings.addMovie(new MovieRating("Lost in Reality", 6.6));
+        movieRatings.addMovie(new MovieRating("Realm of Whispers", 7.5));
+        movieRatings.addMovie(new MovieRating("Echoes of Destiny", 8.2));
+        movieRatings.addMovie(new MovieRating("Whispers of Innocence", 6.4));
+        movieRatings.addMovie(new MovieRating("Shadows of Desolation", 7.1));
+        movieRatings.addMovie(new MovieRating("Whispers in Silence", 7.7));
+        movieRatings.addMovie(new MovieRating("Beyond the Echo", 8.4));
+        movieRatings.addMovie(new MovieRating("Whispers in the Storm", 6.3));
+        movieRatings.addMovie(new MovieRating("Echoes of Solitude", 7.0));
+        movieRatings.addMovie(new MovieRating("Shadows of Salvation", 7.6));
+        movieRatings.addMovie(new MovieRating("Whispers of Oblivion", 6.8));
+        movieRatings.addMovie(new MovieRating("Lost in the Void", 7.2));
+        movieRatings.addMovie(new MovieRating("Realm of Echoes", 8.1));
+        movieRatings.addMovie(new MovieRating("Echoes of Redemption", 6.5));
+        movieRatings.addMovie(new MovieRating("Whispers in the Wilderness", 7.9));
+        movieRatings.addMovie(new MovieRating("Echoes of Evolution", 8.3));
+        movieRatings.addMovie(new MovieRating("Shadows of Solace", 6.7));
+        movieRatings.addMovie(new MovieRating("Whispers in the Fog", 7.4));
+        movieRatings.addMovie(new MovieRating("Beyond the Unknown", 8.0));
+        movieRatings.addMovie(new MovieRating("Whispers in the Chaos", 7.3));
+        movieRatings.addMovie(new MovieRating("Echoes of Extinction", 7.8));
+        movieRatings.addMovie(new MovieRating("Shadows of Solitude", 6.9));
+        movieRatings.addMovie(new MovieRating("Whispers in the Light", 7.4));
+        movieRatings.addMovie(new MovieRating("Lost in Translation", 6.6));
+        movieRatings.addMovie(new MovieRating("Realm of Reflections", 7.5));
+        movieRatings.addMovie(new MovieRating("Echoes of Revelation", 8.2));
+        movieRatings.addMovie(new MovieRating("Whispers of Wisdom", 6.4));
+        movieRatings.addMovie(new MovieRating("Shadows of Desolation", 7.1));
+        movieRatings.addMovie(new MovieRating("Whispers in the Silence", 7.7));
+        movieRatings.addMovie(new MovieRating("Beyond the Horizon", 8.4));
+        movieRatings.addMovie(new MovieRating("Whispers in Time", 6.3));
+        movieRatings.addMovie(new MovieRating("Echoes of Enigma", 7.0));
+        movieRatings.addMovie(new MovieRating("Shadows of Serenity", 7.6));
+        movieRatings.addMovie(new MovieRating("Whispers of Hope", 6.8));
+        movieRatings.addMovie(new MovieRating("Lost in Limbo", 7.2));
+        movieRatings.addMovie(new MovieRating("Realm of Shadows", 8.1));
+        movieRatings.addMovie(new MovieRating("Echoes of Oblivion", 6.5));
+        movieRatings.addMovie(new MovieRating("Whispers of Despair", 7.9));
+        movieRatings.addMovie(new MovieRating("Echoes of Revelation", 8.3));
+        movieRatings.addMovie(new MovieRating("Shadows of Obscurity", 6.7));
+        movieRatings.addMovie(new MovieRating("Whispers in Disguise", 7.4));
+        //#endregion
+        movieRatings.updateDOM();
+    });
+    $("<br>").appendTo(form);
+    $("<input>").attr({
+        type: "button",
+        value: "Sort Alphabetically"
+    }).appendTo(form).on("click", function(e) {
+        e.preventDefault();
+        $(e.target).val(!movieRatings.sortAlphabetReverse ? "Sort Alphabetically ↑" : "Sort Alphabetically ↓");
+        movieRatings.sortAlphabetically();
+    });    
+    $("<input>").attr({
+        type: "button",
+        value: "Sort by Rating"
+    }).appendTo(form).on("click", function(e) {
+        e.preventDefault();
+        $(e.target).val(movieRatings.sortRatingReverse ? "Sort by Rating ↑" : "Sort by Rating ↓");
+        movieRatings.sortRatings();
+    });
+
+    //Clear default values for user
+    $(ratingText).val("");
+    $(titleText).val("");
+  });
+/**
+  * Movie Rating List which has various methods and properties for maintaining an organizing a Movie Rating Database.
+  * Handles movie ratings through objects initialized by a class named Movie Ratings.
+  * @class
+ */
+class MovieRatingsList {
+    /**
+     * Create a Movie Rating List. Initializes the table and sorting variables needed for alternating sort.
+     * @constructor
+    */
+    constructor() {
+        this.movieRatings = [];
+        this.sortAlphabetReverse = false;
+        this.sortRatingReverse = false;
+    }
+    /**
+     * Adds a unique titled movie of the class MovieRating to the list
+     * @param {MovieRating} movie - An object containing an initialized MovieRating Object.
+     * @returns {void}
+    */
+    addMovie(movie){
+        if(!(movie instanceof MovieRating) || 
+            movie.title === undefined || 
+            movie.rating === undefined || 
+            this.movieRatings.some(v=>v.title==movie.title))
+            return false;
+        this.movieRatings.push(movie);
+        return true;
+    }
+    /**
+     * Sorts movie ratings that are stored alternating between Ascending or Descending.
+     * Updates the DOM afterwards.
+     * @returns {void}
+    */
+    sortRatings(){
+        this.movieRatings.sort((a,b) => (this.sortRatingReverse ? a.rating - b.rating : b.rating - a.rating));
+        this.sortRatingReverse = !this.sortRatingReverse;
+        this.updateDOM();
+    }
+    /**
+     * Sorts movie titles that are stored alternating between Ascending or Descending.
+     * Updates the DOM afterwards.
+     * @returns {void}
+    */
+    sortAlphabetically() {
+        this.movieRatings.sort((a,b) => 
+        (this.sortAlphabetReverse ? b : a).title.localeCompare((this.sortAlphabetReverse ? a : b).title, 'en', { sensitivity: 'accent' }));
+        this.sortAlphabetReverse = !this.sortAlphabetReverse;
+        this.updateDOM();
+    }
+    /**
+     * Removes a movie based on the object
+     * Updates the DOM afterwards.
+     * @param {MovieRating} movie Movie to remove from ratings database.
+     * @returns {void}
+    */
+    removeMovie(movie){
+        this.movieRatings = this.movieRatings.filter(v=>v!==movie);
+        this.updateDOM();
+    }
+    /**
+     * Removes all movies
+     * Updates the DOM afterwards.
+     * @returns {void}
+    */
+    removeAllMovies(movie){
+        this.movieRatings = [];
+        this.updateDOM();
+    }
+    /**
+     * Call the MovieRatings createDOM object to retrieve the element objects and assign a delete button.
+     * Updates the DOM afterwards.
+     * If the list is empty, then displays "None yet!"
+     * @returns {void}
+    */
+    updateDOM(){
+        $(".container").empty();
+        this.movieRatings.forEach(v=>v.createDOM().appendTo($(".container")).find("input").on("click", () =>
+            this.removeMovie(v)));
+        $("div.container").children("span:nth-child(odd)").css('background-color','lightgray');
+        if(this.movieRatings.length === 0) {
+            $(".container").text("None yet!");
+            $("h2").text("Rated Movies");
+        } else {
+            $("h2").text("Rated Movies (" + this.movieRatings.length + ")");                            
+            $("<input>").attr({
+                type: "button",
+                value: "Remove All"
+            }).appendTo($("h2")).attr({style:"margin-left: 15px;font-size: 14px;"}).on("click", function(e) {
+                e.preventDefault();
+                this.removeAllMovies();
+                $(this).remove();
+            }.bind(this));
+        }
+    }
+}
+/**
+ * Movie Rating which has a createDOM function to generate a label displaying its properties
+ * @class
+ */
+class MovieRating {
+    /**
+     * Create a Movie Rating. Converts rating to a number with a single decimal
+     * @constructor
+     * @param {string} title - The name of a movie at least 2 characters long.
+     * @param {number|string} rating - A value between 0.0 and 10.0 describing the rating of the movie.
+    */
+    constructor(title, rating) {
+        if (typeof rating === 'string')
+            rating = parseFloat(rating);
+        rating = +rating.toFixed(1);
+        if(title.length < 2 || 
+            typeof rating !== 'number' ||
+            isNaN(rating) || 
+            rating < 0 || 
+            rating > 10)
+            return;
+        Object.assign(this, { title, rating });
+    }
+    /**
+     * Creates DOM element displaying information about a movie rating.
+     * @returns {Element} - A span with a large font for the title and rating enclosed in parenthesis. This element also includes a button that can be clicked for removal.
+    */
+    createDOM() {
+        const movieText1 = $("<span>")
+            .css({"font-size": "22px"})
+            .text(this.title + "  ");
+        $("<span>")
+            .css({"font-style":"italic", "font-size":"15px","color":"darkgreen"})
+            .text(`(Rating: ${this.rating}) `).appendTo(movieText1);
+        $("<input>")
+            .attr({type: "button", value: "Remove", style: "font-size: 14px"})
+            .appendTo(movieText1);
+        return movieText1;
+    }
+}
+</script>
+<h1 style="font-weight:bolder;margin-left: 4px;">Rate a Movie App</h1>
+<p style="margin-left: 9px;font-style:italic;">→Enter a movie title and its rating.</p>
+<div class="form-control">
+</div>
+<h2 style="margin-left:3px">Rated Movies</h2>
+<div class="container" style="display:flex;flex-wrap:wrap;flex-direction:column;margin-left:20px;">None yet!
+</div>
+</body>
+
+</html>
