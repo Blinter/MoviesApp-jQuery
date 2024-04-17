@@ -45,7 +45,9 @@ $(window).on("load", function() {
         e.preventDefault();
         if(movieRatings.addMovie(new MovieRating($(titleText).val(), $(ratingText).val()))){
             $(ratingText).val("");
-            $(titleText).val("");
+            $(titleText).val("");            
+            titleText.css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
+            ratingText.css({"background-color":"white","color": "black", "font-style": "normal", "border-bottom": "none"});
             movieRatings.updateDOM();
         }
     });
